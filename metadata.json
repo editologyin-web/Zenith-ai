@@ -1,0 +1,7 @@
+{
+  "name": "Zenith X - Scrollytelling Experience",
+  "description": "A high-end product landing page featuring scroll-linked image sequence animations, cinematic lighting, and a minimalist design aesthetic for the fictional Zenith X headphones.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
