@@ -1,9 +1,66 @@
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 
 const FRAME_COUNT = 120;
 const PAGE_HEIGHT = '400vh';
+
+const WaveformLoading: React.FC<{ progress: number }> = ({ progress }) => {
+  const bars = Array.from({ length: 12 });
+  
+  return (
+    <div className="flex flex-col items-center justify-center">
+      {/* Waveform Animation */}
+      <div className="flex items-end space-x-1.5 h-16 mb-8">
+        {bars.map((_, i) => (
+          <motion.div
+            key={i}
+            className="w-1 bg-white rounded-full"
+            initial={{ height: 4 }}
+            animate={{ 
+              height: [8, 48, 12, 32, 8],
+            }}
+            transition={{
+              duration: 1.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.1,
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Brand & Progress */}
+      <div className="text-center">
+        <motion.div 
+          className="text-2xl font-bold tracking-[0.3em] uppercase mb-2 text-white"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          Frizzy <span className="text-white/30 font-light">Music</span>
+        </motion.div>
+        
+        <div className="relative w-48 h-[1px] bg-white/10 mx-auto overflow-hidden">
+          <motion.div 
+            className="absolute inset-y-0 left-0 bg-white"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ type: "spring", bounce: 0, duration: 0.5 }}
+          />
+        </div>
+        
+        <motion.p 
+          className="mt-4 text-[10px] uppercase tracking-[0.4em] text-white/40 font-medium"
+          animate={{ opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          Calibrating Audio Engine — {progress}%
+        </motion.p>
+      </div>
+    </div>
+  );
+};
 
 const HeadphoneScroll: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,20 +86,18 @@ const HeadphoneScroll: React.FC = () => {
     const preloadImages = () => {
       for (let i = 0; i < FRAME_COUNT; i++) {
         const img = new Image();
-        // Fallback to high-quality placeholders if real sequence isn't found
-        // In a real build, we'd use the provided naming convention: `frame_${i}_delay-0.04s.webp`
-        // Since we don't have the assets, we'll simulate the look.
-        img.src = `https://picsum.photos/seed/${i + 100}/1920/1080?grayscale`; 
-        
-        // Note: For a real demo, you'd replace the above with the actual local assets path:
-        // img.src = `/assets/sequence/frame_${i.toString().padStart(3, '0')}_delay-0.04s.webp`;
+        // Using a seeded picsum for deterministic image sequence simulation
+        img.src = `https://picsum.photos/seed/${i + 200}/1920/1080?grayscale`; 
 
         img.onload = () => {
           loadedCount++;
           setLoadingProgress(Math.floor((loadedCount / FRAME_COUNT) * 100));
           if (loadedCount === FRAME_COUNT) {
-            setImages(loadedImages);
-            setIsLoading(false);
+            // Add a small artificial delay for a smoother transition after 100%
+            setTimeout(() => {
+              setImages(loadedImages);
+              setIsLoading(false);
+            }, 800);
           }
         };
         loadedImages[i] = img;
@@ -61,7 +116,6 @@ const HeadphoneScroll: React.FC = () => {
 
       const img = images[index];
       
-      // Handle responsiveness / Object-fit contain logic
       const canvasWidth = window.innerWidth;
       const canvasHeight = window.innerHeight;
       canvas.width = canvasWidth;
@@ -113,21 +167,18 @@ const HeadphoneScroll: React.FC = () => {
 
   return (
     <div ref={containerRef} className="relative w-full" style={{ height: PAGE_HEIGHT }}>
-      {/* Loading Overlay */}
-      {isLoading && (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050505] transition-opacity duration-1000">
-          <div className="w-64 h-[2px] bg-white/10 rounded-full overflow-hidden mb-4">
-            <motion.div 
-              className="h-full bg-white" 
-              initial={{ width: 0 }}
-              animate={{ width: `${loadingProgress}%` }}
-            />
-          </div>
-          <p className="text-white/40 text-xs uppercase tracking-widest font-medium">
-            Calibrating Zenith X... {loadingProgress}%
-          </p>
-        </div>
-      )}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div 
+            key="loader"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050505]"
+            exit={{ opacity: 0, filter: "blur(20px)" }}
+            transition={{ duration: 1, ease: "circOut" }}
+          >
+            <WaveformLoading progress={loadingProgress} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Sticky Canvas Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#050505]">
@@ -142,7 +193,7 @@ const HeadphoneScroll: React.FC = () => {
           {/* Section 1: 0-20% */}
           <Section progress={scrollYProgress} range={[0, 0.2]} align="center">
             <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4">
-              Zenith X
+              Frizzy Music
             </h1>
             <p className="text-lg md:text-xl text-white/60 tracking-widest uppercase">
               Pure Sound. Zero Noise.

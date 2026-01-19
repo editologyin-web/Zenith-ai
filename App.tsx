@@ -19,7 +19,7 @@ const App: React.FC = () => {
             </h2>
             <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
               Every curve, every component, every signal path has been meticulously optimized. 
-              Zenith X isn't just a pair of headphones; it's a statement of engineering purity.
+              Frizzy Music isn't just a pair of headphones; it's a statement of engineering purity.
             </p>
           </div>
         </section>

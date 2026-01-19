@@ -4,8 +4,8 @@ import React from 'react';
 const Navbar: React.FC = () => {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6 backdrop-blur-sm bg-[#050505]/20 border-b border-white/5">
-      <div className="text-xl font-bold tracking-tighter">
-        ZENITH <span className="text-white/40 font-light">X</span>
+      <div className="text-xl font-bold tracking-tighter uppercase">
+        FRIZZY <span className="text-white/40 font-light">MUSIC</span>
       </div>
       <div className="hidden md:flex items-center space-x-12">
         <NavLink href="#">Design</NavLink>

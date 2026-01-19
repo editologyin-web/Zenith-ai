@@ -9,8 +9,8 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-white/40 mb-6">Products</h4>
             <ul className="space-y-4 text-sm text-white/60">
-              <li><a href="#" className="hover:text-white transition-colors">Zenith X</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Zenith One</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Frizzy Music</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Frizzy One</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Earbuds</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Accessories</a></li>
             </ul>
@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 text-[10px] uppercase tracking-widest text-white/30 font-medium">
-          <p>© 2024 ZENITH AUDIO TECHNOLOGY. ALL RIGHTS RESERVED.</p>
+          <p>© 2024 FRIZZY MUSIC CORP. ALL RIGHTS RESERVED.</p>
           <div className="flex space-x-8 mt-4 md:mt-0">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
