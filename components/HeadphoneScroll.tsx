@@ -249,8 +249,15 @@ interface SectionProps {
 }
 
 const Section: React.FC<SectionProps> = ({ progress, range, align, children }) => {
+  // Main section opacity
   const opacity = useTransform(progress, [range[0], range[0] + 0.05, range[1] - 0.05, range[1]], [0, 1, 1, 0]);
-  const y = useTransform(progress, [range[0], range[1]], [50, -50]);
+  
+  // Parallax: The text moves from 120px to -120px relative to its center as we scroll the range.
+  // This creates a sense that it's "floating" and moving at a different speed than the sticky background.
+  const y = useTransform(progress, [range[0], range[1]], [120, -120]);
+  
+  // Subtle secondary parallax for an even deeper effect
+  const subY = useTransform(progress, [range[0], range[1]], [40, -40]);
 
   const alignmentClasses = {
     left: 'items-start text-left pl-[10%]',
@@ -263,7 +270,17 @@ const Section: React.FC<SectionProps> = ({ progress, range, align, children }) =
       style={{ opacity, y }}
       className={`absolute inset-0 flex flex-col justify-center px-6 ${alignmentClasses[align]}`}
     >
-      {children}
+      <div className="flex flex-col">
+        {React.Children.map(children, (child, index) => (
+          <motion.div
+            key={index}
+            style={{ y: index > 0 ? subY : 0 }}
+            className={index > 0 ? "mt-2" : ""}
+          >
+            {child}
+          </motion.div>
+        ))}
+      </div>
     </motion.div>
   );
 };
